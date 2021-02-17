@@ -1,25 +1,19 @@
 const argon2 = require('argon2');
 const { SHA3 } = require('sha3');
 
-class HashService {
-    getSha3Digest(password) {
-        return new SHA3(512).update(password).digest('hex');
-    }
-
-    async compare(text, hashedText) {
-        const digest = this.getSha3Digest(text)
+const HashService = () => ({
+    compare: async (text, hashedText) => {
+        const digest = new SHA3(512).update(text).digest('hex')
         try {
-            const isCorrect = await argon2.verify(hashedText, digest);
-            return isCorrect
+            return await argon2.verify(hashedText, digest)
         } catch (e) {
             return false
         }
-    }
-
-    async hash(text) {
-        const sha2Digest = this.getSha3Digest(text)
+    },
+    hash: async (text) => {
+        const sha2Digest = new SHA3(512).update(text).digest('hex')
         return argon2.hash(sha2Digest);
     }
-}
+})
 
 module.exports = HashService;

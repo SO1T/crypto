@@ -1,11 +1,5 @@
-class AuthController {
-    constructor(authService) {
-        this.authService = authService;
-        this.login = this.login.bind(this);
-        this.register = this.register.bind(this);
-    }
-
-    async login(req, res) {
+const AuthController = (authService) => ({
+    login: async (req, res) => {
         const { username, password } = req.body;
 
         if (!username || !password) {
@@ -13,7 +7,7 @@ class AuthController {
         }
 
         try {
-           const user = await this.authService.validateUserCredentials(username, password);
+           const user = await authService.validateUserCredentials(username, password);
            res.status(200).json({ message: 'Successful login!', data: user })
         } catch (e) {
             if (e.name === 'WrongCredentialsError') {
@@ -21,9 +15,8 @@ class AuthController {
             }
             res.status(500).end()
         }
-    }
-
-    async register(req, res) {
+    },
+    register: async (req, res) => {
         const { username, password } = req.body;
 
         if (!username || !password) {
@@ -31,8 +24,8 @@ class AuthController {
         }
 
         try {
-            this.authService.validatePassword(password);
-            const user = await this.authService.createUser(username, password);
+            authService.validatePassword(password);
+            const user = await authService.createUser(username, password);
             res.status(201).json({ message: 'New user created!', data: user })
         } catch (e) {
             if (e.name === 'ValidationError') {
@@ -45,6 +38,6 @@ class AuthController {
             res.status(500).end()
         }
     }
-}
+})
 
 module.exports = AuthController;
