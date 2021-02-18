@@ -64,7 +64,7 @@ const generateHumanLikePassword = () => {
             const letter = pass[index].toUpperCase();
             const stringArray = pass.split('');
             stringArray.splice(index, 1, letter);
-            pass =  stringArray.join('')
+            pass = stringArray.join('')
         })
     }
 
